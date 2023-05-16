@@ -1,5 +1,7 @@
 # Anotações importantes 
 
+<a href="https://sequelize.org/docs/v6/other-topics/migrations/">Documentação</a>
+
 Para criação desse projeto serão necessários as seguintes ferramentas:
 
 - MySql
@@ -16,6 +18,8 @@ Comandos:
 
 Comando:
 node index.js
+
+![Captura de tela 2023-05-15 213609](https://github.com/bruleonel/curso-ingles/assets/104650333/be01737c-fec7-47c4-af7f-412e7ec98f0e)
 
 ## Atualização automática:
 

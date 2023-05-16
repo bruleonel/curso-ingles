@@ -38,3 +38,7 @@ Adicione o Script e depois o comando:
 
 - npm install mysql2
 - npm instal sequelize sequelize-cli path
+
+## Iniciando o Projeto
+
+- npx sequelize-cli init

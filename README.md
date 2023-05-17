@@ -42,3 +42,130 @@ Adicione o Script e depois o comando:
 
 - npm install mysql2
 - npm instal sequelize sequelize-cli path
+
+1 - Dentro da pasta Config/config.json deve conter o nome do banco de dados criado no MySqul:
+
+````js
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "escola_ingles",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+````
+2 - Depois Crie sua tabela, exemplo desse projeto:
+- npx sequelize-cli model:create --name Pessoas --attributes nome:string,ativo:boolean,email:string,role:string
+
+3 - Migre os dados para o MySQL: 
+- npx sequelize-cli db:migrate
+
+4 - Use o seed para popular a tabela:
+- npx sequelize seed:generate --name demo-pessoa
+
+5 - crie a demo:
+- npx sequelize seed:generate --name demo-pessoa
+
+6- Migre a Demo:
+- npx sequelize-cli db:seed:all
+
+### Criando os Controllers
+
+
+
+## Sobre os Comandos
+
+ORM (Object-Relational Mapping) funcionam para facilitar o cotidiano de desenvolvimento. Dessa forma o Sequelize suporta diversos bancos de dados relacionais como PostgreSQL, MySQL, SQLite e MSSQL. Com o Sequelize, é possível mapear objetos do JavaScript para tabelas do banco de dados e realizar operações de CRUD (Create, Read, Update, Delete) utilizando apenas JavaScript, sem a necessidade de escrever queries em SQL.
+
+Há algumas mudanças e atualizações entre as versões do Sequelize, a utilizada no curso é a versão 5 e você pode consultar sua documentação caso tenha alguma dúvida.
+
+O Sequelize também possui uma ferramenta de linha de comando, que chamamos de CLI (Command Line Interface), que pode ser usada para criar um banco de dados, gerar modelos, migrações e seeders, dentre outras tarefas. Neste curso, por exemplo, a criação do banco de dados é realizada diretamente pela linha de comando do banco MySQL. No entanto, é possível realizar a mesma operação via CLI do Sequelize,com o comando npx sequelize-cli db:create.
+
+Com a CLI do Sequelize 5.5.1, que é a versão utilizada neste curso, é possível utilizar diversos comandos para gerenciar o banco de dados, tais como:
+
+Comandos CLI:
+
+## Comandos Sequelize	e Descrição
+
+
+``sequelize db:migrate	``
+*Executa todas as migrações pendentes para atualizar o banco de dados.*
+
+
+``sequelize db:migrate:schema:timestamps:add``	
+*Atualiza uma tabela de migração para ter marcação de data/hora*
+
+``sequelize db:migrate:status``	
+*Exibe o status de todas as migrações*
+
+``sequelize db:migrate:undo	``
+*Reverte a migração mais recente do banco de dados.*
+
+``sequelize db:migrate:undo:all``	
+*Reverte todas as migrações*
+
+``sequelize db:seed	``
+*Inicializa um seeder específico*
+
+``sequelize db:seed:undo``	
+*Deleta arquivo do banco de dados*
+
+``sequelize db:seed:all	``
+*Inicializa todos os seeders*
+
+``sequelize db:seed:undo:al``l	
+*Deleta todos os dados do banco de dados*
+
+````sequelize db:create	````
+*Cria um banco com uma configuração específica*
+
+``sequelize db:drop	``
+*exclui o banco de dados especificado na configuração.*
+
+``sequelize init``	
+*Inicializa um projeto*
+
+``sequelize init:config	``
+*Inicializa as configurações*
+
+``sequelize init:migrations``	
+*Inicializa as migrações*
+
+``sequelize init:models	``
+*Inicializa as models*
+
+``sequelize init:seeders``	
+*Inicializa os seeders*
+
+``sequelize migration:generate [alias: migration:create]	``
+*Gera um novo arquivo de migração*
+
+``sequelize model:generate [alias: model:create]	``
+*Gera uma model e sua migração*
+
+``sequelize seed:generate	``
+*Gera um novo arquivo de seed*
+
+Além desses comandos, a CLI do Sequelize 5.5.1 também permite criar usuários, gerar senhas criptografadas, atualizar configurações de banco de dados, entre outras tarefas. Dessa forma, a CLI do Sequelize 5.5.1 é uma ferramenta poderosa e flexível para gerenciar bancos de dados em projetos Node.js. Com ela, é possível criar e atualizar modelos, migrações e seeders de forma fácil e rápida, além de realizar outras tarefas essenciais para o desenvolvimento de aplicações web.
+
+
+## Curiosidades
+
+### api/index.js 
+- É o ponto de entrada da aplicação, onde iniciamos o servidor e chamamos a biblioteca Express para gerenciar as rotas da API.
+
+### api/models/index.js 
+- É o arquivo que gerencia todos os modelos da pasta models e é atraveś dele que o Sequelize conecta os modelos ao banco de dados de acordo com o ambiente escolhido (durante o projeto estamos trabalhando com o ambiente 'development', de desenvolvimento).
+
+### api/routes/index.js 
+- É o ponto de entrada que gerencia os arquivos de rotas, importa os métodos de cada arquivo api/routes/[arquivo] através dos require e chama estes métodos de acordo com a rota acessada pelo usuário.
+
+````js
+const routes = require('./routes')
+````
+
+Nesse caso não é necessário incluir o nome do arquivo no caminho, pois o JavaScript, por padrão, já procura um arquivo index.js dentro da pasta routes. O arquivo api/routes/index.js, por sua vez, organiza todos os arquivos de rotas que estão dentro da pasta, e repassar essa informação para o ponto de entrada da aplicação.
+
+E por que não ter apenas um arquivo com todas as rotas, ou chamá-las direto em api/index.js? Porque, à medida em que a aplicação cresce em complexidade, é possível ter muitas rotas, dependendo da operação que queremos fazer. Então quanto mais separadas ficam as responsabilidades, mais fácil de se localizar no código, modificar linhas, atualizar funcionalidades e etc.
+
+Quando importamos ``const database = require('../models')`` no controlador PessoaController.js ocorre o mesmo processo: o JavaScript localiza o arquivo index.js dentro da pasta models e a partir dele o Sequelize identifica qual o ambiente, conecta com o banco correto, indexa os modelos presentes na pasta e faz as operações.

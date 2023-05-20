@@ -2,6 +2,9 @@
 
 <a href="https://sequelize.org/docs/v6/other-topics/migrations/">Documentação</a>
 
+![api](https://github.com/bruleonel/curso-ingles/assets/104650333/35366879-a2b2-4c60-aa04-864e226ae122)
+
+
 Para criação desse projeto serão necessários as seguintes ferramentas:
 
 - MySql
@@ -67,7 +70,7 @@ Adicione o Script e depois o comando:
 5 - crie a demo:
 - npx sequelize seed:generate --name demo-pessoa
 
-6- Migre a Demo:
+6 - Migre a Demo:
 - npx sequelize-cli db:seed:all
 
 ### Criando os Controllers
@@ -75,12 +78,21 @@ Adicione o Script e depois o comando:
 - npx sequelize-cli seed:generate --name demo-nivel
 
 Popule a tabela:
+![Populando a tabela](https://github.com/bruleonel/curso-ingles/assets/104650333/9914604b-2ec2-449d-9efd-3eb984b99479)
 
 Retorne:
+![Retorno da populacao](https://github.com/bruleonel/curso-ingles/assets/104650333/87182fce-2e23-4785-80b1-a762da24cbc6)
 
 Passe para o banco:
 
 - npx sequelize-cli db:seed:all
+
+### Relacione as Tabelas
+
+![Captura de tela 2023-05-17 091851](https://github.com/bruleonel/curso-ingles/assets/104650333/ffc6e15a-c25b-4560-8622-87903abe8019)
+
+![criando as relacoes das tabelas](https://github.com/bruleonel/curso-ingles/assets/104650333/023a08bb-578d-44ca-9084-326d364e7b14)
+
 
 ## Sobre os Comandos
 

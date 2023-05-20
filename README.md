@@ -11,13 +11,16 @@ Para criação desse projeto serão necessários as seguintes ferramentas:
 - Node
 - Postman
 
-Comandos:
+**Comandos para rodar o projeto:**
 
-- npm run start *rodar o projeto*
+``npm run start ``
+
 # Iniciando o Projeto (ordem)
 
 ``npm init -y``
+
 ``npm install express``
+
 ``npm install body-parser``
 
 1) Crie uma pasta para separar o projeto, aqui criei a pasta API>index.js;

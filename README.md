@@ -14,24 +14,19 @@ Para criação desse projeto serão necessários as seguintes ferramentas:
 Comandos:
 
 - npm run start *rodar o projeto*
-- npm init -y
-- npm install express
-- npm install body-parser
+# Iniciando o Projeto (ordem)
 
-## Efetuando as Requisições:
+``npm init -y``
+``npm install express``
+``npm install body-parser``
 
-Comando:
-node index.js
+1) Crie uma pasta para separar o projeto, aqui criei a pasta API>index.js;
+2) Importe o express e o Body-Parser;
+3) Instale o nodemon;
 
-![Captura de tela 2023-05-15 213609](https://github.com/bruleonel/curso-ingles/assets/104650333/be01737c-fec7-47c4-af7f-412e7ec98f0e)
+``npm install --save-dev nodemn``
 
-## Atualização automática:
-
-Para que o código seja atualizado sem você ter que "derrubar" a navegação você pode usar uma biblioteca chamada nodemon com o comando:
-
-- npm install --save-dev nodemon
-
-Adicione o Script e depois o comando:
+4) Adicione um Script no arquivo package.json para atualização automática do run;
 
 ````js
  "scripts": {
@@ -39,27 +34,68 @@ Adicione o Script e depois o comando:
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 ````
+5) Pode rodar o comando:
 
-- npm run start
+``npm run start``
 
 ## Instalações no projeto
 
-- npm install mysql2
-- npm instal sequelize sequelize-cli path
+``npm install mysql2``
 
-1 - Dentro da pasta Config/config.json deve conter o nome do banco de dados criado no MySqul:
+``npm instal sequelize sequelize-cli path``
+
+``npx sequelize-cli init``
+
+*Foram criados alguns arquivos que serão usados no projeto*
+
+<a href="https://sequelize.org/v5/manual/migrations.html">Documentação</a>
+
+6) Coloque tudo dentro da pasta API;
+
+7) Para os arquivos não ficarem "perdidos" crie o arquivo .sequelizerc dentro da pasta geral:
+
+<a href="https://sequelize.org/docs/v6/other-topics/migrations/">Documentação (role para baixo até o exemplo com o título: "Using Babel")</a>
+
+## Conectando com o Banco
+
+![Captura de tela 2023-05-17 091851](https://github.com/bruleonel/curso-ingles/assets/104650333/ffc6e15a-c25b-4560-8622-87903abe8019)
+
+8) Entre no MySql e crie o Banco escola_ingles;
+
+``CREATE DATABASE escola_ingles``
+
+9) Dentro da pasta Config/config.json deve conter o nome do banco de dados criado no MySqul:
 
 ````js
   "development": {
     "username": "root",
-    "password": null,
+    "password": null, //COLOQUE SUA SENHA AQUI
     "database": "escola_ingles",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
 ````
-2 - Depois Crie sua tabela, exemplo desse projeto:
-- npx sequelize-cli model:create --name Pessoas --attributes nome:string,ativo:boolean,email:string,role:string
+*Só uma observação, o arquivo index, criado dentro de models servirá para gerenciar todos os seus modelos*
+
+## Criando Modelos
+
+*Lembre-se de criar os modelos de maneira que não afetem as relações das tabelas*
+
+10) Comando usado aqui:
+
+``npx sequelize-cli model:create --name Pessoas --attributes nome:string,ativo:boolean,email:string,role:string``
+
+*Foram criados os arquivos dentro de "Models" e dentro de "Migrations", além disso o Id foi criado automáticamente*
+
+### Saiba mais:
+
+Em SQL, o termo "migrações" refere-se a um processo de gerenciamento e manipulação de alterações estruturais em um banco de dados. As migrações são utilizadas para modificar o esquema de banco de dados, como criar ou alterar tabelas, adicionar ou remover colunas, definir restrições e executar outras operações relacionadas à estrutura do banco de dados.
+
+As migrações são normalmente aplicadas em bancos de dados relacionais por meio de scripts ou arquivos que contêm instruções SQL. Esses scripts são executados em ordem específica para que as alterações sejam aplicadas de forma consistente e controlada.
+
+O uso de migrações oferece várias vantagens, como permitir a evolução incremental do esquema do banco de dados, facilitar a colaboração em equipe e o controle de versão do banco de dados, além de permitir a reversão de alterações, se necessário.
+
+Em resumo, migrações em SQL são um mecanismo que permite realizar alterações estruturais em um banco de dados de forma organizada, controlada e rastreável.
 
 3 - Migre os dados para o MySQL: 
 - npx sequelize-cli db:migrate
@@ -89,7 +125,6 @@ Passe para o banco:
 
 ### Relacione as Tabelas
 
-![Captura de tela 2023-05-17 091851](https://github.com/bruleonel/curso-ingles/assets/104650333/ffc6e15a-c25b-4560-8622-87903abe8019)
 
 ![criando as relacoes das tabelas](https://github.com/bruleonel/curso-ingles/assets/104650333/023a08bb-578d-44ca-9084-326d364e7b14)
 
@@ -103,72 +138,6 @@ Há algumas mudanças e atualizações entre as versões do Sequelize, a utiliza
 O Sequelize também possui uma ferramenta de linha de comando, que chamamos de CLI (Command Line Interface), que pode ser usada para criar um banco de dados, gerar modelos, migrações e seeders, dentre outras tarefas. Neste curso, por exemplo, a criação do banco de dados é realizada diretamente pela linha de comando do banco MySQL. No entanto, é possível realizar a mesma operação via CLI do Sequelize,com o comando npx sequelize-cli db:create.
 
 Com a CLI do Sequelize 5.5.1, que é a versão utilizada neste curso, é possível utilizar diversos comandos para gerenciar o banco de dados, tais como:
-
-Comandos CLI:
-
-## Comandos Sequelize	e Descrição
-
-
-``sequelize db:migrate	``
-*Executa todas as migrações pendentes para atualizar o banco de dados.*
-
-
-``sequelize db:migrate:schema:timestamps:add``	
-*Atualiza uma tabela de migração para ter marcação de data/hora*
-
-``sequelize db:migrate:status``	
-*Exibe o status de todas as migrações*
-
-``sequelize db:migrate:undo	``
-*Reverte a migração mais recente do banco de dados.*
-
-``sequelize db:migrate:undo:all``	
-*Reverte todas as migrações*
-
-``sequelize db:seed	``
-*Inicializa um seeder específico*
-
-``sequelize db:seed:undo``	
-*Deleta arquivo do banco de dados*
-
-``sequelize db:seed:all	``
-*Inicializa todos os seeders*
-
-``sequelize db:seed:undo:al``l	
-*Deleta todos os dados do banco de dados*
-
-````sequelize db:create	````
-*Cria um banco com uma configuração específica*
-
-``sequelize db:drop	``
-*exclui o banco de dados especificado na configuração.*
-
-``sequelize init``	
-*Inicializa um projeto*
-
-``sequelize init:config	``
-*Inicializa as configurações*
-
-``sequelize init:migrations``	
-*Inicializa as migrações*
-
-``sequelize init:models	``
-*Inicializa as models*
-
-``sequelize init:seeders``	
-*Inicializa os seeders*
-
-``sequelize migration:generate [alias: migration:create]	``
-*Gera um novo arquivo de migração*
-
-``sequelize model:generate [alias: model:create]	``
-*Gera uma model e sua migração*
-
-``sequelize seed:generate	``
-*Gera um novo arquivo de seed*
-
-Além desses comandos, a CLI do Sequelize 5.5.1 também permite criar usuários, gerar senhas criptografadas, atualizar configurações de banco de dados, entre outras tarefas. Dessa forma, a CLI do Sequelize 5.5.1 é uma ferramenta poderosa e flexível para gerenciar bancos de dados em projetos Node.js. Com ela, é possível criar e atualizar modelos, migrações e seeders de forma fácil e rápida, além de realizar outras tarefas essenciais para o desenvolvimento de aplicações web.
-
 
 ## Curiosidades
 

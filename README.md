@@ -10,6 +10,7 @@ Para criação desse projeto serão necessários as seguintes ferramentas:
 
 Comandos:
 
+- npm run start *rodar o projeto*
 - npm init -y
 - npm install express
 - npm install body-parser
@@ -71,7 +72,15 @@ Adicione o Script e depois o comando:
 
 ### Criando os Controllers
 
+- npx sequelize-cli seed:generate --name demo-nivel
 
+Popule a tabela:
+
+Retorne:
+
+Passe para o banco:
+
+- npx sequelize-cli db:seed:all
 
 ## Sobre os Comandos
 
@@ -169,3 +178,21 @@ Nesse caso não é necessário incluir o nome do arquivo no caminho, pois o Java
 E por que não ter apenas um arquivo com todas as rotas, ou chamá-las direto em api/index.js? Porque, à medida em que a aplicação cresce em complexidade, é possível ter muitas rotas, dependendo da operação que queremos fazer. Então quanto mais separadas ficam as responsabilidades, mais fácil de se localizar no código, modificar linhas, atualizar funcionalidades e etc.
 
 Quando importamos ``const database = require('../models')`` no controlador PessoaController.js ocorre o mesmo processo: o JavaScript localiza o arquivo index.js dentro da pasta models e a partir dele o Sequelize identifica qual o ambiente, conecta com o banco correto, indexa os modelos presentes na pasta e faz as operações.
+
+
+Se você pesquisou tutoriais sobre como fazer associações com Sequelize, pode ter visto que em alguns deles a associação 1:n (um para muitos) é feita utilizando somente o método hasMany(), sem acrescentar o belongsTo(). Vai funcionar? Então por que a documentação do Sequelize diz para utilizar os dois métodos juntos?
+
+Vamos pegar o seguinte exemplo:
+
+````js
+Equipe.hasMany(Atleta);
+Atleta.belongsTo(Equipe);
+````
+Ou seja, uma equipe tem vários (hasMany) atletas, mas atletas pertencem à (belongsTo) somente uma equipe cada.
+
+### Bom, mas e aí?
+Quando utilizamos o método Atleta.belongsTo(Equipe) o Sequelize cria, “por baixo dos panos” alguns métodos “getters” e “setters”, como por exemplo atleta.getEquipe().
+
+O método Equipe.hasMany(Atleta) faz a associação na outra ponta, permitindo a criação do método equipe.getAtletas(). A criação destes métodos é um comportamento padrão do Sequelize, mesmo que não tenham sido usados no projeto que fizemos no curso.
+
+Se utilizarmos somente um dos métodos - por exemplo, somente o hasMany em um dos lados da relação - seria possível usar o método para get (trazer) todas as atletas de uma equipe, mas não a equipe a que pertence uma atleta.

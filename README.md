@@ -100,31 +100,23 @@ O uso de migrações oferece várias vantagens, como permitir a evolução incre
 
 Em resumo, migrações em SQL são um mecanismo que permite realizar alterações estruturais em um banco de dados de forma organizada, controlada e rastreável.
 
-3 - Migre os dados para o MySQL: 
-- npx sequelize-cli db:migrate
+11) Migre os dados para o MySQL: 
 
-4 - Use o seed para popular a tabela:
-- npx sequelize seed:generate --name demo-pessoa
+``npx sequelize-cli db:migrate``
 
-5 - crie a demo:
-- npx sequelize seed:generate --name demo-pessoa
+11) Use o seed para popular a tabela e crie uma Demo:
 
-6 - Migre a Demo:
-- npx sequelize-cli db:seed:all
+``npx sequelize seed:generate --name demo-pessoa``
 
-### Criando os Controllers
-
-- npx sequelize-cli seed:generate --name demo-nivel
-
-Popule a tabela:
 ![Populando a tabela](https://github.com/bruleonel/curso-ingles/assets/104650333/9914604b-2ec2-449d-9efd-3eb984b99479)
 
 Retorne:
+
 ![Retorno da populacao](https://github.com/bruleonel/curso-ingles/assets/104650333/87182fce-2e23-4785-80b1-a762da24cbc6)
 
-Passe para o banco:
+12) Migre a Demo:
 
-- npx sequelize-cli db:seed:all
+`` npx sequelize-cli db:seed:all``
 
 ### Relacione as Tabelas
 
@@ -180,3 +172,19 @@ Quando utilizamos o método Atleta.belongsTo(Equipe) o Sequelize cria, “por ba
 O método Equipe.hasMany(Atleta) faz a associação na outra ponta, permitindo a criação do método equipe.getAtletas(). A criação destes métodos é um comportamento padrão do Sequelize, mesmo que não tenham sido usados no projeto que fizemos no curso.
 
 Se utilizarmos somente um dos métodos - por exemplo, somente o hasMany em um dos lados da relação - seria possível usar o método para get (trazer) todas as atletas de uma equipe, mas não a equipe a que pertence uma atleta.
+
+
+# Atualizações importantes!
+
+Esse projeto este projeto está sendo usado para os estudos da semana 18, sendo assim recebemos alguns requisitos do projeto:
+
+- O cliente não gostaria que registros importantes do sistema, como as Pessoas, sejam apagados definitivamente do banco de dados.
+<a href="https://sequelize.org/docs/v6/core-concepts/paranoid/">Documentação</a>
+
+- Para deixar a interface mais limpa, o cliente gostaria que na lista de Pessoas, por padrão, fossem exibidos somente os usuários ativos.
+- Foram percebidas algumas falhas de validação dos formulários por parte do front-end, o que resultou em dados de email inválidos no banco. É desejável que essa validação não seja responsabilidade exclusiva do front.
+- É importante poder consultar todas as matrículas confirmadas referentes a estudante X de forma rápida.
+- O cliente gostaria de poder consultar as turmas abertas por intervalo de data, para não receber informações desnecessárias (como turmas antigas).
+- O cliente quer poder consultar as matrículas por turma e saber quais delas estão lotadas, para organizar melhor as matrículas.
+- O cliente gostaria que, uma vez que o cadastro de um estudante fosse desativado, todas as matrículas relativas a este estudante automaticamente passassem a constar como “canceladas”.
+- Durante o projeto vamos analisar esta lista e transformar esses requisitos em novas funcionalidades.

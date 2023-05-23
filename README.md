@@ -182,7 +182,38 @@ Esse projeto este projeto está sendo usado para os estudos da semana 18, sendo 
 <a href="https://sequelize.org/docs/v6/core-concepts/paranoid/">Documentação</a>
 
 - Para deixar a interface mais limpa, o cliente gostaria que na lista de Pessoas, por padrão, fossem exibidos somente os usuários ativos.
+<a href="https://sequelize.org/docs/v6/other-topics/scopes/">Documentação</a>
+
 - Foram percebidas algumas falhas de validação dos formulários por parte do front-end, o que resultou em dados de email inválidos no banco. É desejável que essa validação não seja responsabilidade exclusiva do front.
+<a href="https://sequelize.org/docs/v6/core-concepts/validations-and-constraints/">Documentação</a>
+
+Nesse caso dentro do arquivo pessoas js será feito a seguinte alteração:
+
+*antes*
+````js
+email: DataTypes.STRING
+````
+
+*depois*
+````js
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail:true
+      }
+    }
+````
+
+*ou*
+````js
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: { args: true, msg: 'E-mail inválido, por favor tente outro e-mail' }
+      }
+    }
+````
+
 - É importante poder consultar todas as matrículas confirmadas referentes a estudante X de forma rápida.
 - O cliente gostaria de poder consultar as turmas abertas por intervalo de data, para não receber informações desnecessárias (como turmas antigas).
 - O cliente quer poder consultar as matrículas por turma e saber quais delas estão lotadas, para organizar melhor as matrículas.

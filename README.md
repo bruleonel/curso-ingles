@@ -178,13 +178,13 @@ Se utilizarmos somente um dos métodos - por exemplo, somente o hasMany em um do
 
 Esse projeto este projeto está sendo usado para os estudos da semana 18, sendo assim recebemos alguns requisitos do projeto:
 
-- O cliente não gostaria que registros importantes do sistema, como as Pessoas, sejam apagados definitivamente do banco de dados.
+- (ok) O cliente não gostaria que registros importantes do sistema, como as Pessoas, sejam apagados definitivamente do banco de dados.
 <a href="https://sequelize.org/docs/v6/core-concepts/paranoid/">Documentação</a>
 
-- Para deixar a interface mais limpa, o cliente gostaria que na lista de Pessoas, por padrão, fossem exibidos somente os usuários ativos.
+- (ok) Para deixar a interface mais limpa, o cliente gostaria que na lista de Pessoas, por padrão, fossem exibidos somente os usuários ativos.
 <a href="https://sequelize.org/docs/v6/other-topics/scopes/">Documentação</a>
 
-- Foram percebidas algumas falhas de validação dos formulários por parte do front-end, o que resultou em dados de email inválidos no banco. É desejável que essa validação não seja responsabilidade exclusiva do front.
+- (ok) Foram percebidas algumas falhas de validação dos formulários por parte do front-end, o que resultou em dados de email inválidos no banco. É desejável que essa validação não seja responsabilidade exclusiva do front.
 <a href="https://sequelize.org/docs/v6/core-concepts/validations-and-constraints/">Documentação</a>
 
 Nesse caso dentro do arquivo pessoas js será feito a seguinte alteração:
@@ -214,8 +214,62 @@ email: DataTypes.STRING
     }
 ````
 
-- É importante poder consultar todas as matrículas confirmadas referentes a estudante X de forma rápida.
-- O cliente gostaria de poder consultar as turmas abertas por intervalo de data, para não receber informações desnecessárias (como turmas antigas).
-- O cliente quer poder consultar as matrículas por turma e saber quais delas estão lotadas, para organizar melhor as matrículas.
-- O cliente gostaria que, uma vez que o cadastro de um estudante fosse desativado, todas as matrículas relativas a este estudante automaticamente passassem a constar como “canceladas”.
-- Durante o projeto vamos analisar esta lista e transformar esses requisitos em novas funcionalidades.
+- (ok) É importante poder consultar todas as matrículas confirmadas referentes a estudante X de forma rápida.
+- (ok) O cliente gostaria de poder consultar as turmas abertas por intervalo de data, para não receber informações desnecessárias (como turmas antigas).
+- (ok) O cliente quer poder consultar as matrículas por turma e saber quais delas estão lotadas, para organizar melhor as matrículas.
+- (ok) O cliente gostaria que, uma vez que o cadastro de um estudante fosse desativado, todas as matrículas relativas a este estudante automaticamente passassem a constar como “canceladas”.
+- (ok) Durante o projeto vamos analisar esta lista e transformar esses requisitos em novas funcionalidades.
+
+Agora que estamos acrescentando alguma complexidade às queries que o Sequelize vai passar para o SQL, é interessante relembrar que existe uma ordem de execução para os operadores e cláusulas.
+
+No caso de queries de SELECT, a ordem lógica é a seguinte:
+
+FROM: pega as tabelas onde estão os dados
+
+WHERE: filtra os dados
+
+GROUP BY: agrega os dados
+
+HAVING: filtra os dados agregados
+
+SELECT: retorna os resultados
+
+ORDER BY: ordena os resultados
+
+LIMIT: limita a quantidade de resultados
+
+Ou seja, cada query começa encontrando os dados, filtrando e ordenando. Essa ordem pode fazer com que certos resultados sejam ou não acessíveis em dado momento. Por exemplo, a cláusula WHERE é executada antes de GROUP BY, então não podemos depender de dados retornados pelo GROUP BY para então passar WHERE.
+
+Porém, os DBMS (Database Management Systems) como MySQL, PostgreSQL, MSSQL, entre outras, utilizam database engines, ou algo como “motores de database” numa tradução mais literal, para executar as queries. Esses engines, na prática, reorganizam a ordem lógica acima para otimizar as queries e deixá-las mais rápidas e com melhor performance, enquanto essa reorganização não modificar os resultados da query. Os database engines também fazem algumas verificações para garantir que a query faça sentido como um todo antes de fazer essa reorganização e rodar qualquer coisa.
+
+Assim, embora exista uma ordem lógica na execução de uma query SELECT, e seja uma boa prática nos basearmos nela, na prática não temos realmente como saber qual é a ordem que será efetivamente utilizada, pois isso vai depender de como cada engine vai calcular a forma mais otimizada de execução da query.
+
+
+## Transações
+
+<a href="https://sequelize.org/docs/v6/other-topics/transactions/">Documentação</a>
+
+O Sequelize não implementa transações nas queries por padrão; mas é muito aconselhável que você as utilize, especialmente em produção.
+
+Existem duas formas de fazer isso utilizando os métodos do Sequelize: a primeira é utilizando transações não gerenciadas (unmanaged transactions), onde quem está desenvolvendo é responsável por chamar os métodos apropriados de rollback e commit:
+
+````js
+const transacao = await sequelize.transaction();
+
+try {
+  const personagem = await Personagem.create({
+    nome: 'Bart',
+    sobrenome: 'Simpson'
+  }, { transaction: transacao });
+  await personagem.addParente({
+    nome: 'Lisa',
+    sobrenome: 'Simpson'
+  }, { transaction: transacao });
+  await transacao.commit();
+} catch (error) {
+  await transacao.rollback();
+}
+````
+No exemplo acima (da própria documentação do Sequelize) os métodos t.commit() e t.rollback() foram adicionados manualmente.
+
+A outra forma, como fizemos no vídeo, foi utilizando transações gerenciadas (managed transactions) onde toda a operação a ser feita no banco é passada como callback do método sequelize.transaction(). Nesse caso, e como foi feito no código do nosso projeto, não há a necessidade de adicionar manualmente os métodos t.commit() e t.rollback().

@@ -1,5 +1,9 @@
 # Anotações importantes 
 
+
+*OBS.: ESTE PROJETO FOI DESENVOLVIDO NAS SEMANAS 17 E 18 DO PROGRAMA DESENVOLVE*
+
+
 <a href="https://sequelize.org/docs/v6/other-topics/migrations/">Documentação</a>
 
 ![api](https://github.com/bruleonel/curso-ingles/assets/104650333/35366879-a2b2-4c60-aa04-864e226ae122)
